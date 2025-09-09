@@ -337,10 +337,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Import configuration
-from config import BACKEND_URL
+from config import BACKEND_URL, IS_LOCAL
 
 # API base URL - works both locally and in cloud
 API_BASE = BACKEND_URL
+
+# Show environment indicator in development
+if IS_LOCAL:
+    st.sidebar.info("🔧 Running in Development Mode", icon="⚙️")
+else:
+    st.sidebar.success("🌐 Running in Production Mode", icon="✨")
 
 def call_api(endpoint, data=None):
     """Helper function to call FastAPI endpoints"""
