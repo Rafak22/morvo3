@@ -91,19 +91,29 @@ st.markdown("""
     }
     
     .user-message {
-        background: linear-gradient(135deg, var(--royal-purple) 0%, #4A0982 100%);
-        color: var(--soft-white);
+        background: linear-gradient(135deg, #9747FF 0%, #7E30CC 100%);
+        color: white !important;
         margin-left: 15%;
         border-left: 4px solid var(--golden);
         box-shadow: 0 4px 15px rgba(106, 13, 173, 0.2);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    
+    .user-message strong, .user-message span {
+        color: white !important;
     }
     
     .bot-message {
         background: linear-gradient(135deg, var(--saudi-green) 0%, #005347 100%);
-        color: var(--soft-white);
+        color: white !important;
         margin-right: 15%;
         border-right: 4px solid var(--golden);
         box-shadow: 0 4px 15px rgba(0, 109, 91, 0.2);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    
+    .bot-message strong, .bot-message span {
+        color: white !important;
     }
     
     /* Input styling with Saudi theme */
