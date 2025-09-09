@@ -95,32 +95,47 @@ def extract_information(stage: str, message: str) -> dict:
     return info
 
 def extract_name(message: str) -> str:
-    """Extract name from message"""
-    # Look for common Arabic patterns like "انا [name]" or "اسمي [name]"
+    """Extract name from message with improved validation"""
+    # Clean and prepare the message
     message = message.strip()
     
-    # Pattern: "انا [name]" or "أنا [name]"
-    if "انا " in message or "أنا " in message:
-        parts = message.split("انا " if "انا " in message else "أنا ")
-        if len(parts) > 1:
-            name = parts[1].strip()
-            # Take first word as name
-            return name.split()[0] if name.split() else ""
+    # Check for URLs - if found, return empty to trigger error message
+    url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    if re.search(url_pattern, message):
+        return ""
+        
+    # Remove common prefixes that might confuse name extraction
+    prefixes_to_remove = [
+        "انا ", "أنا ", "اسمي ", "إسمي ",
+        "مرحبا ", "مرحباً ", "السلام عليكم",
+        "http", "www", ".com", ".net", ".org"
+    ]
     
-    # Pattern: "اسمي [name]" or "اسمي [name]"
-    if "اسمي " in message:
-        parts = message.split("اسمي ")
-        if len(parts) > 1:
-            name = parts[1].strip()
-            # Take first word as name
-            return name.split()[0] if name.split() else ""
+    for prefix in prefixes_to_remove:
+        if message.startswith(prefix):
+            message = message[len(prefix):].strip()
     
-    # If no pattern found, take the last word (common in Arabic)
+    # Split into words and get the first word as name
     words = message.split()
-    if len(words) >= 1:
-        return words[-1].strip()  # Take last word as name
+    if not words:
+        return ""
+        
+    potential_name = words[0].strip()
     
-    return ""
+    # Validate the potential name
+    # Check if it's too long (probably a sentence)
+    if len(potential_name) > 20:
+        return ""
+        
+    # Check if it contains numbers or special characters
+    if re.search(r'[0-9@#$%^&*(),.?":{}|<>]', potential_name):
+        return ""
+        
+    # Check if it's too short
+    if len(potential_name) < 2:
+        return ""
+        
+    return potential_name
 
 def extract_job_role(message: str) -> str:
     """Extract job role/position from message"""

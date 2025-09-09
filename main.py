@@ -62,7 +62,25 @@ async def get_profile(user_id: str):
 async def chat(input: ChatInput):
     history = memory.get_history(input.user_id)
     
-    # If the message contains a URL and profile is complete, run website analysis directly
+    # Get current conversation status
+    status = get_conversation_status(input.user_id)
+    current_stage = status.get('stage', 'greeting')
+    
+    # Special handling for name input stage
+    if current_stage in ['greeting', 'name']:
+        # Check for URLs or invalid input
+        url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        if re.search(url_pattern, input.message):
+            response = "عذراً، يبدو أنك أدخلت رابطاً. في هذه المرحلة، أحتاج فقط إلى اسمك. هل يمكنك إخباري باسمك؟"
+            return {
+                "response": response,
+                "history": memory.get_history(input.user_id),
+                "conversation_status": status,
+                "profile_complete": False,
+                "error": "invalid_name"
+            }
+    
+    # If the message contains a URL and profile is complete, run website analysis
     url_match = re.search(r"https?://[^\s]+", input.message.strip())
     if url_match and is_profile_complete(input.user_id):
         try:
