@@ -12,25 +12,46 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Force light theme
+# Custom theme with Saudi-inspired colors
 st.markdown("""
 <style>
+    /* Main theme colors */
+    :root {
+        --saudi-green: #006D5B;
+        --royal-purple: #6A0DAD;
+        --dark-gray: #1F1F1F;
+        --soft-white: #F8F8F8;
+        --golden: #FFB800;
+        --light-blue: #2DA8FF;
+    }
+
     /* Override Streamlit's default theme */
     .stApp {
-        background-color: #ffffff !important;
+        background: linear-gradient(135deg, var(--soft-white) 0%, #E8F0ED 100%) !important;
     }
     
-    /* Force light theme */
     [data-testid="stAppViewContainer"] {
-        background-color: #ffffff !important;
+        background: transparent !important;
     }
     
     [data-testid="stSidebar"] {
-        background-color: #f8fafc !important;
+        background: linear-gradient(180deg, var(--saudi-green) 0%, #005347 100%) !important;
+        border-radius: 0 20px 20px 0;
+    }
+
+    [data-testid="stSidebar"] .stMarkdown {
+        color: var(--soft-white) !important;
     }
     
     [data-testid="stHeader"] {
-        background-color: #ffffff !important;
+        background-color: transparent !important;
+    }
+
+    /* Make sidebar text white */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] .stMarkdown, 
+    [data-testid="stSidebar"] div:not(.stProgress) {
+        color: var(--soft-white) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -38,18 +59,19 @@ st.markdown("""
 # Custom CSS for better colors and Arabic support
 st.markdown("""
 <style>
-    /* Main theme colors - Light Blue Theme */
+    /* Main header with Saudi theme */
     .main-header {
         text-align: center;
-        color: #1e3a8a;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 2rem;
         font-weight: bold;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        background: linear-gradient(135deg, var(--saudi-green) 0%, var(--golden) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        padding: 20px;
+        border-radius: 15px;
     }
     
     .arabic-text {
@@ -69,45 +91,67 @@ st.markdown("""
     }
     
     .user-message {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--royal-purple) 0%, #4A0982 100%);
+        color: var(--soft-white);
         margin-left: 15%;
-        border-left: 4px solid #60a5fa;
+        border-left: 4px solid var(--golden);
+        box-shadow: 0 4px 15px rgba(106, 13, 173, 0.2);
     }
     
     .bot-message {
-        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--saudi-green) 0%, #005347 100%);
+        color: var(--soft-white);
         margin-right: 15%;
-        border-right: 4px solid #22d3ee;
+        border-right: 4px solid var(--golden);
+        box-shadow: 0 4px 15px rgba(0, 109, 91, 0.2);
     }
     
-    /* Input styling - Light Blue Theme */
+    /* Input styling with Saudi theme */
     .stTextInput > div > div > input {
         border-radius: 25px;
-        border: 2px solid #3b82f6;
+        border: 2px solid var(--saudi-green);
         padding: 12px 20px;
         font-size: 16px;
-        background: #f8fafc;
+        background: var(--soft-white);
+        color: var(--dark-gray) !important;
+        box-shadow: 0 2px 10px rgba(0, 109, 91, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stTextInput > div > div > input:focus {
+        border-color: var(--golden);
+        box-shadow: 0 2px 15px rgba(255, 184, 0, 0.2);
     }
     
-    /* Button styling - Light Blue Theme */
+    /* Button styling with Saudi theme */
     .stButton > button {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-        color: white;
-        border: none;
+        background: linear-gradient(135deg, var(--saudi-green) 0%, #005347 100%);
+        color: var(--soft-white);
+        border: 2px solid var(--golden);
         border-radius: 25px;
-        padding: 10px 30px;
+        padding: 12px 30px;
         font-size: 16px;
         font-weight: bold;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 109, 91, 0.2);
         transition: all 0.3s ease;
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        box-shadow: 0 6px 20px rgba(0, 109, 91, 0.3);
+        background: linear-gradient(135deg, var(--royal-purple) 0%, #4A0982 100%);
+        border-color: var(--light-blue);
+    }
+
+    /* Primary button variation */
+    .stButton > button[data-baseweb="button"][kind="primary"] {
+        background: linear-gradient(135deg, var(--royal-purple) 0%, #4A0982 100%);
+        border-color: var(--golden);
+    }
+
+    .stButton > button[data-baseweb="button"][kind="primary"]:hover {
+        background: linear-gradient(135deg, var(--saudi-green) 0%, #005347 100%);
+        border-color: var(--light-blue);
     }
     
     /* Sidebar styling - Light Blue Theme */
@@ -246,11 +290,33 @@ st.markdown("""
         background-color: transparent !important;
     }
     
-    /* Info boxes styling */
-    .stInfo, .stSuccess, .stWarning, .stError {
-        background-color: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        color: #1e293b !important;
+    /* Info boxes styling with Saudi theme */
+    .stInfo {
+        background-color: rgba(45, 168, 255, 0.1) !important;
+        border: 1px solid var(--light-blue) !important;
+        color: var(--dark-gray) !important;
+        border-radius: 15px !important;
+    }
+    
+    .stSuccess {
+        background-color: rgba(0, 109, 91, 0.1) !important;
+        border: 1px solid var(--saudi-green) !important;
+        color: var(--saudi-green) !important;
+        border-radius: 15px !important;
+    }
+    
+    .stWarning {
+        background-color: rgba(255, 184, 0, 0.1) !important;
+        border: 1px solid var(--golden) !important;
+        color: var(--dark-gray) !important;
+        border-radius: 15px !important;
+    }
+    
+    .stError {
+        background-color: rgba(106, 13, 173, 0.1) !important;
+        border: 1px solid var(--royal-purple) !important;
+        color: var(--royal-purple) !important;
+        border-radius: 15px !important;
     }
     
     /* Make sure all text is visible */
