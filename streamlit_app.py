@@ -270,8 +270,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# API base URL
-API_BASE = "http://127.0.0.1:8000"
+# Import configuration
+from config import BACKEND_URL
+
+# API base URL - works both locally and in cloud
+API_BASE = BACKEND_URL
 
 def call_api(endpoint, data=None):
     """Helper function to call FastAPI endpoints"""

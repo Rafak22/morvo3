@@ -20,7 +20,7 @@ MORVO is an AI-powered marketing assistant that helps businesses analyze and imp
 - RAG (Retrieval Augmented Generation)
 - Web Scraping: BeautifulSoup4
 
-## Getting Started
+## Local Development
 
 1. Clone the repository:
 ```bash
@@ -33,13 +33,13 @@ cd morvo3
 pip install -r requirements.txt
 ```
 
-3. Set up environment variables:
-Create a `.env` file with:
+3. Create a `.env` file with:
 ```
+BACKEND_URL=http://127.0.0.1:8000
 OPENAI_API_KEY=your_api_key_here
 ```
 
-4. Run the application:
+4. Run the application locally:
 ```bash
 # Start the backend server
 uvicorn main:app --reload
@@ -48,9 +48,31 @@ uvicorn main:app --reload
 streamlit run streamlit_app.py
 ```
 
-## Deployment
+## Cloud Deployment
 
-This application is deployed on Streamlit Cloud and can be accessed at: [MORVO App](https://morvo.streamlit.app)
+### Backend Deployment (Render.com)
+
+1. Create a new Web Service on Render.com
+2. Connect your GitHub repository
+3. Configure the service:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - Add Environment Variables:
+     - `OPENAI_API_KEY`: Your OpenAI API key
+
+### Frontend Deployment (Streamlit Cloud)
+
+1. Go to share.streamlit.io
+2. Connect your GitHub repository
+3. Set Environment Variables:
+   - `BACKEND_URL`: Your Render.com backend URL (e.g., https://morvo-backend.onrender.com)
+   - `OPENAI_API_KEY`: Your OpenAI API key
+
+## Usage
+
+The application will work both locally and in the cloud:
+- Locally: Uses http://127.0.0.1:8000 as backend
+- Cloud: Uses the BACKEND_URL environment variable
 
 ## Contributing
 
