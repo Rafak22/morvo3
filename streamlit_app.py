@@ -359,17 +359,36 @@ else:
     st.sidebar.success("🌐 Running in Production Mode", icon="✨")
 
 def call_api(endpoint, data=None):
-    """Helper function to call FastAPI endpoints"""
+    """Helper function to call FastAPI endpoints with improved error handling"""
     try:
+        # Increase timeout to 120 seconds for cold starts
         if data:
-            response = requests.post(f"{API_BASE}{endpoint}", json=data, timeout=60)
+            response = requests.post(f"{API_BASE}{endpoint}", json=data, timeout=120)
         else:
-            response = requests.get(f"{API_BASE}{endpoint}", timeout=60)
-        return response.json() if response.status_code == 200 else None
+            response = requests.get(f"{API_BASE}{endpoint}", timeout=120)
+            
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"خطأ في الاتصال: {response.status_code}")
+            if not IS_LOCAL:
+                st.info("الخادم يحتاج إلى وقت للتشغيل (30-60 ثانية). يرجى الانتظار وإعادة المحاولة.")
+            return None
+            
     except requests.exceptions.ConnectionError:
+        st.error("لا يمكن الاتصال بالخادم")
+        if not IS_LOCAL:
+            st.info("الخادم يحتاج إلى وقت للتشغيل (30-60 ثانية). يرجى الانتظار وإعادة المحاولة.")
         return None
+        
+    except requests.exceptions.Timeout:
+        st.error("انتهت مهلة الاتصال")
+        if not IS_LOCAL:
+            st.info("الخادم يحتاج إلى وقت للتشغيل (30-60 ثانية). يرجى الانتظار وإعادة المحاولة.")
+        return None
+        
     except Exception as e:
-        st.error(f"API Error: {str(e)}")
+        st.error(f"خطأ غير متوقع: {str(e)}")
         return None
 
 def get_user_profile_status(user_id):
